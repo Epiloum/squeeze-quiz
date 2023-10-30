@@ -1,0 +1,31 @@
+version: '3'
+services:
+  squiz-be:
+    build:
+      context: ./be
+      dockerfile: ../be.Dockerfile
+    volumes:
+      - ./be:/app
+    ports:
+      - "8080:8080"
+
+  squiz-fe:
+    image: node:14
+    volumes:
+      - ./fe:/app
+    ports:
+      - "3000:3000"
+    working_dir: /app
+    command: ["npm", "start"]
+
+  squiz-db:
+    image: mariadb:11.1.2
+    volumes:
+      - ./db:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
